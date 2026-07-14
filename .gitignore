@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Generated demo data
+*.nc
+cwa_demo.nc
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
