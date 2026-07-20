@@ -1,5 +1,9 @@
 # climate-workflow-analytics (`cwa`)
 
+[![CI](https://github.com/SyedTahirHussan/climate-workflow-analytics/actions/workflows/ci.yml/badge.svg)](https://github.com/SyedTahirHussan/climate-workflow-analytics/actions/workflows/ci.yml)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 A compact, tested, GPU-capable prototype for post-processing climate/weather
 data with in-transit streaming and machine-learning analytics.
 

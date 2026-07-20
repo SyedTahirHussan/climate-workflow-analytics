@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "climate-workflow-analytics: GPU-capable in-transit post-processing and ML analytics for climate/weather workflows"
+authors:
+  - family-names: "Hussan"
+    given-names: "Syed Tahir"
+    email: "tahirsherazi786@gmail.com"
+version: 0.1.0
+date-released: "2026-07-20"
+license: MIT
+repository-code: "https://github.com/SyedTahirHussan/climate-workflow-analytics"
+keywords:
+  - climate
+  - weather
+  - hpc
+  - gpu
+  - in-transit
+  - streaming
+  - netcdf
+  - scheduling
+  - machine-learning
