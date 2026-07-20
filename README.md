@@ -48,6 +48,12 @@ On a CUDA 12 GPU node, add the GPU extra to enable the CuPy path:
 pip install -e ".[dev,gpu]"    # installs cupy-cuda12x
 ```
 
+The `--plot` figures need matplotlib, available as its own extra:
+
+```bash
+pip install -e ".[plots]"      # enables cwa forecast/benchmark --plot
+```
+
 CuPy is an **optional** dependency: if it is absent, every GPU request
 transparently falls back to CPU and records that it did so — correctness never
 depends on a GPU being present.
@@ -57,9 +63,9 @@ depends on a GPU being present.
 ```bash
 cwa gen                # write a synthetic CF-NetCDF dataset
 cwa stream             # in-transit reduce it to a climate index (goal 2)
-cwa benchmark          # time operators + fit the performance model (methods)
+cwa benchmark --plot   # time operators + fit the performance model (methods)
 cwa schedule           # train the ML placement policy, show crossovers (methods)
-cwa forecast           # forecast the index vs a seasonal-naive baseline (goal 3)
+cwa forecast --plot    # forecast the index vs a seasonal-naive baseline (goal 3)
 ```
 
 Or use it as a library — see [`examples/`](examples/):
@@ -120,17 +126,28 @@ gradient-boosted model reaches MAE 0.018 °C vs the seasonal-naive baseline's
 0.027 °C — a **+34% skill score**. The baseline is reported alongside because a
 model that cannot beat seasonal-naive on seasonal data has added nothing.
 
+![12-month forecast vs seasonal-naive baseline](docs/img/forecast.png)
+
+The cost curves behind the performance model (`cwa benchmark --plot`) — the
+flat left end of each curve is the fixed overhead, the straight right end the
+throughput asymptote:
+
+![Measured timings and fitted cost model](docs/img/benchmark.png)
+
 ## Tests
 
 ```bash
-pytest            # 24 tests
+pytest            # 45 tests
 ```
 
 The tests assert *correctness properties*, not just "it runs":
 area-weighting matches a hand computation and differs from a naive mean;
 anomalies sum to zero per phase; streamed statistics equal batch statistics;
 Welford matches NumPy at large means; the scheduler learns the correct
-size-dependent device and a crossover in the right decade.
+size-dependent device and a crossover in the right decade; forecast features
+provably use only the past (corrupting the future must not change them); the
+cost-model fit recovers known parameters from synthetic timings; every CLI
+subcommand runs end-to-end on a tiny dataset.
 
 ## Repository layout
 
@@ -143,9 +160,10 @@ src/cwa/
   perfmodel.py   benchmark harness + analytical cost model + crossover
   scheduler.py   ML-based CPU/GPU placement
   forecast.py    climate-index forecasting + honest baseline
+  plots.py       publication-style figures (optional matplotlib extra)
   cli.py         `cwa` command-line entry point
 examples/        runnable programmatic demos (with correctness cross-checks)
-tests/           24 correctness tests
+tests/           45 correctness tests
 docs/            architecture.md, design_rationale.md
 ```
 

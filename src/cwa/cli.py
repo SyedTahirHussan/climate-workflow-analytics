@@ -65,6 +65,10 @@ def cmd_benchmark(args: argparse.Namespace) -> None:
         m = fit_cost_model(df, op, "cpu")
         print(f"{op:<22}{m.fixed_overhead * 1e6:>15.1f}"
               f"{m.throughput / 1e6:>24.1f}{m.r2:>8.3f}")
+    if args.plot:
+        from .plots import plot_cost_model
+
+        print(f"\nfigure saved: {plot_cost_model(df, args.plot)}")
 
 
 def cmd_schedule(args: argparse.Namespace) -> None:
@@ -112,6 +116,11 @@ def cmd_forecast(args: argparse.Namespace) -> None:
     verdict = "beats" if report.skill_score > 0 else "does not beat"
     print(f"  skill score : {report.skill_score:+.1%}  "
           f"(model {verdict} the baseline)")
+    if args.plot:
+        from .plots import plot_forecast
+
+        train = series[: -report.horizon]  # what the models actually saw
+        print(f"\nfigure saved: {plot_forecast(report, args.plot, history=train)}")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -132,6 +141,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     b = sub.add_parser("benchmark", help="time operators + fit performance model")
     b.add_argument("--repeats", type=int, default=3)
+    b.add_argument("--plot", nargs="?", const="cwa_benchmark.png", default=None,
+                   metavar="PNG", help="save the cost-model figure (needs [plots] extra)")
     b.set_defaults(func=cmd_benchmark)
 
     c = sub.add_parser("schedule", help="train ML placement policy, show crossovers")
@@ -142,6 +153,8 @@ def build_parser() -> argparse.ArgumentParser:
     f.add_argument("--path", default=str(_default_path()))
     f.add_argument("--n-time", type=int, default=240)
     f.add_argument("--horizon", type=int, default=12)
+    f.add_argument("--plot", nargs="?", const="cwa_forecast.png", default=None,
+                   metavar="PNG", help="save the forecast figure (needs [plots] extra)")
     f.set_defaults(func=cmd_forecast)
 
     return p

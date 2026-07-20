@@ -33,7 +33,9 @@ dependencies = [
 # `pip install climate-workflow-analytics[gpu]` on a CUDA 12 node. The wheel
 # name encodes the CUDA major version; pick the one matching the driver.
 gpu = ["cupy-cuda12x>=12.0"]
-dev = ["pytest>=7.0", "pytest-cov>=4.0", "ruff>=0.1"]
+# `pip install climate-workflow-analytics[plots]` enables `--plot` figures.
+plots = ["matplotlib>=3.7"]
+dev = ["pytest>=7.0", "pytest-cov>=4.0", "ruff>=0.1", "matplotlib>=3.7"]
 
 [project.scripts]
 cwa = "cwa.cli:main"
